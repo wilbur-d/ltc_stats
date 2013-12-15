@@ -29,3 +29,8 @@ DATABASE = {'drivername': 'postgresql',
             'port': '5432',
             'username': 'postgres',
             'password': 'postgres'}
+
+
+TODO
+-------------------
+We're getting some data, let's do something with it...
