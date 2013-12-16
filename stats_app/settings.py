@@ -1,8 +1,12 @@
 API_URL = "https://btc-e.com/api/2/ltc_usd/ticker"
 MINING_API_URL = ""
 
+import os
+PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+DB_PATH = os.path.join(PROJECT_ROOT, '../ticker.db')
+
 DATABASE = {'drivername': 'sqlite',  # postgresql
-            'database': 'ticker.db'}
+            'database': DB_PATH}
             # 'host': '',
             # 'port': '',
             # 'username': '',
