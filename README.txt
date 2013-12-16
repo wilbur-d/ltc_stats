@@ -5,6 +5,8 @@ Setup
 -------------------
 pip install -r requirements.txt
 
+set MINING_API_URL in local_settings.py
+
 
 To Run
 -------------------
@@ -20,6 +22,8 @@ API = https://btc-e.com/api/2/ltc_usd/ticker
 Info
 -------------------
 Settings are contained in stats_app/settings.py
+
+You can add local_settings.py file to override any settings
 
 Example database configuraton for using a postgresql db
 
