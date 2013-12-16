@@ -7,3 +7,9 @@ DATABASE = {'drivername': 'sqlite',  # postgresql
             # 'port': '',
             # 'username': '',
             # 'password': ''}
+
+
+try:
+    from local_settings import *
+except ImportError, exp:
+    pass
