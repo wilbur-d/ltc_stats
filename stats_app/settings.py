@@ -1,4 +1,5 @@
 API_URL = "https://btc-e.com/api/2/ltc_usd/ticker"
+MINING_API_URL = ""
 
 DATABASE = {'drivername': 'sqlite',  # postgresql
             'database': 'ticker.db'}

@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, Float, DateTime
+from sqlalchemy import create_engine, Column, Integer, Float, DateTime, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.engine.url import URL
 
@@ -33,3 +33,16 @@ class Ticker(Base):
     sell = Column(Float)
     updated = Column(DateTime)
     server_time = Column(DateTime)
+
+
+class MiningHistory(Base):
+    __tablename__ = "mining_history"
+
+    id = Column(Integer, primary_key=True)
+    username = Column(String)
+    confirmed_rewards = Column(Float)
+    round_estimate = Column(Float)
+    total_hashrate = Column(Integer)
+    payout_history = Column(Integer)
+    round_shares = Column(Integer)
+    date_added = Column(DateTime)
