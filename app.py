@@ -4,6 +4,7 @@ from flask import Flask
 from flask import render_template
 
 from sqlalchemy.engine.url import URL
+from sqlalchemy import func
 
 from flask.ext.sqlalchemy import SQLAlchemy
 
@@ -21,7 +22,8 @@ db = SQLAlchemy(app)
 def index():
     tickers = db.session.query(Ticker).order_by(Ticker.updated.desc()).all()[:10]
     history = db.session.query(MiningHistory).order_by(MiningHistory.date_added.desc()).all()[:30]
-    return render_template('index.html', tickers=tickers, history=history, active="home")
+    pool_worth = "%.2f" % round(tickers[0].last * history[0].confirmed_rewards, 2)
+    return render_template('index.html', tickers=tickers, history=history, pool_worth=pool_worth, active="home")
 
 
 @app.route('/charts')
@@ -31,5 +33,5 @@ def charts():
 
 
 if __name__ == '__main__':
-    app.debug = False
+    app.debug = True
     app.run(host='0.0.0.0')

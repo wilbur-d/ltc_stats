@@ -10,7 +10,11 @@ set MINING_API_URL in local_settings.py
 
 To Run
 -------------------
+The logger is
 ./main.py
+
+The web app is
+./app.py
 
 
 Defaults
