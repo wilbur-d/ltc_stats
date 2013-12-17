@@ -79,11 +79,14 @@ class TradeStore(BaseStore):
         """ since we have a list of trades, we have to handle this differently """
         session = self.Session()
         feed_data = self.get_feed()
-
+        tids = []
+        for row in session.query(Trades, Trades.tid).all():
+            tids.append(row.tid)
         for item in feed_data:
-            feed_dict = item
-            feed_dict['date'] = arrow.get(feed_dict['date']).datetime
-            stats_obj = self.model(**feed_dict)
-            session.add(stats_obj)
-            session.commit()
-            return stats_obj # do we need to return this?
+            if item['tid'] not in tids:
+                feed_dict = item
+                feed_dict['date'] = arrow.get(feed_dict['date']).datetime
+                stats_obj = self.model(**feed_dict)
+                session.add(stats_obj)
+                session.commit()
+            #return stats_obj # do we need to return this?
