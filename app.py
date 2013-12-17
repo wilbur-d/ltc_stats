@@ -26,10 +26,10 @@ def index():
 
 @app.route('/charts')
 def charts():
-    history = db.session.query(MiningHistory).order_by(MiningHistory.date_added).all()[:30]
+    history = db.session.query(MiningHistory).order_by(MiningHistory.date_added).all()[-30:]
     return render_template('charts.html', history=history, active="charts")
 
 
 if __name__ == '__main__':
-    app.debug = True
+    app.debug = False
     app.run(host='0.0.0.0')
