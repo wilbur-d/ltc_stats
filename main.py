@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-from stats_app.ticker_store import TickerStore, MiningHistoryStore, Tradestore
+from stats_app.ticker_store import TickerStore, MiningHistoryStore, TradeStore
 from stats_app.settings import API_URL, MINING_API_URL, TRADE_API_URL
 
 
