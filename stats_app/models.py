@@ -57,9 +57,9 @@ class Trades(Base):
     __tablename__ = "trades"
 
     id = Column(Integer, primary_key=True)
-    item = Column(String, length=3) # Currency type, e.g., LTC, BTC, etc.
+    item = Column(String) # Currency type, e.g., LTC, BTC, etc.
     date = Column(DateTime)
-    trade_type = Column(String, length=3) # 'Bid' or 'Ask'
+    trade_type = Column(String) # 'Bid' or 'Ask'
     price = Column(Float)
     amount = Column(Float)
     tid = Column(Integer)
