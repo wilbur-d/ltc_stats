@@ -82,7 +82,7 @@ class TradeStore(BaseStore):
 
         for item in feed_data:
             feed_dict = item
-            feed_dict['date'] = arrow.get(feed_dict['date']).format('YYYY-MM-DD HH:mm:ss')
+            feed_dict['date'] = arrow.get(feed_dict['date']).datetime#.format('YYYY-MM-DD HH:mm:ss')
             stats_obj = self.model(**feed_dict)
             session.add(stats_obj)
             session.commit()
