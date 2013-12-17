@@ -52,3 +52,18 @@ class MiningHistory(Base):
 
     def __repr__(self):
         return "%s - %s" % (self.confirmed_rewards, self.date_added)
+
+class Trades(Base):
+    __tablename__ = "trades"
+
+    id = Column(Integer, primary_key=True)
+    price_currency = Column(String)
+    trade_type = Column(String) # 'Bid' or 'Ask'
+    item = Column(String) # Currency type, e.g., LTC, BTC, etc.
+    price = Column(Float)
+    tid = Column(Integer)
+    amount = Column(Float)
+    date = Column(DateTime)
+
+    def __repr__(self):
+        return "%s (%s): %s coins at %s" % (self.date, self.trade_type, self.amount, self.price)

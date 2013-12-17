@@ -2,8 +2,9 @@ import requests
 import arrow
 
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.sql import exists
 
-from models import Ticker, MiningHistory, db_connect, create_tables
+from models import Ticker, MiningHistory, Trades, db_connect, create_tables
 
 
 class BaseStore(object):
@@ -55,3 +56,36 @@ class MiningHistoryStore(BaseStore):
         mining_status = data
         mining_status['date_added'] = arrow.utcnow().datetime
         return mining_status
+
+class TradeStore(BaseStore):
+    """ The trade api returns a list of trades
+    like the following:
+
+    {u'price_currency': u'USD',
+    u'trade_type': u'bid',
+    u'item': u'LTC',
+    u'price': 29.57,
+    u'tid': 20572079, <-- are the unique over all time?
+    u'amount': 1,
+    u'date': 1387055215}
+
+    from each of these, we want to record: date, type, price, amount, tid
+
+    also: two calls to the api may return lists with significant
+    overlap. what's the best way to eliminiate that?
+    """
+    model = Trades
+
+    def save(self):
+        """ since we have a list of trades, we have to handle this differently """
+        session = self.Session()
+        feed_data = self.get_feed()
+        for item in feed_data:
+            #if session.query(Trades).filter(Trades.tid == item['tid']).count() == 0:
+            if not session.query(exists().where(Trades.tid == item['tid'])).scalar():
+                feed_dict = item
+                feed_dict['date'] = arrow.get(feed_dict['date']).datetime
+                stats_obj = self.model(**feed_dict)
+                session.add(stats_obj)
+                session.commit()
+            #return stats_obj # do we need to return this?

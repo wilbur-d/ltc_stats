@@ -1,5 +1,6 @@
 API_URL = "https://btc-e.com/api/2/ltc_usd/ticker"
 MINING_API_URL = ""
+TRADE_API_URL = "https://btc-e.com/api/2/ltc_usd/trades"
 
 import os
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
