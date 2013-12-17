@@ -75,10 +75,6 @@ class TradeStore(BaseStore):
     """
     model = Trades
 
-    def parse_feed(self, data):
-
-        return data
-
     def save(self):
         """ since we have a list of trades, we have to handle this differently """
         session = self.Session()
