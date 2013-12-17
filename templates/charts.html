@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block head %}
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['DateTime', 'Confirmed LTC',],
+          {% for h in history %}
+          ['{{ h.date_added }}',  {{ h.confirmed_rewards }}, ],
+          {% endfor %}
+        ]);
+
+        var options = {
+          title: 'Earnings',
+          width: 700,
+          height: 300,
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+
+        var hdata = google.visualization.arrayToDataTable([
+          ['DateTime', 'Total HashRate'],
+          {% for h in history %}
+          ['{{ h.date_added }}',  {{  h.total_hashrate }}, ],
+          {% endfor %}
+        ]);
+
+        var hoptions = {
+          title: 'Hashrates',
+          width: 700,
+          height: 300,
+        };
+
+        var hchart = new google.visualization.LineChart(document.getElementById('hashrate_div'));
+        hchart.draw(hdata, hoptions);
+
+      }
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+    <div id="hashrate_div" style=width: 900px; height: 500px;"></div>
+{% endblock %}

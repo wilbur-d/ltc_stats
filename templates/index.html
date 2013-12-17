@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+      <h1>ALUG LTC</h1>
+      <div class="panel panel-default">
+        <div class="panel-heading">Alug Mining History</div>
+        <table class="table table-striped table-responsive">
+          <tr>
+            <th>Confirmed Rewards</th><th>Round Estimate</th><th>Total Hashrate</th><th>Payout History</th><th>Round Shares</th><th>DateTime</th>
+          </tr>
+          {% for h in history %}
+          <tr>
+            <td>{{ h.confirmed_rewards }}</td>
+            <td>{{ h.round_estimate }}</td>
+            <td>{{ h.total_hashrate }}</td>
+            <td>{{ h.payout_history }}</td>
+            <td>{{ h.round_shares }}</td>
+            <td>{{ h.date_added }}</td>
+          {% endfor %}
+        </table>
+      </div>
+
+
+      <div class="panel panel-default">
+        <div class="panel-heading">LTC Ticker</div>
+        <table class="table table-striped table-responsive">
+          <tr>
+            <th>high</th><th>low</th><th>avg</th><th>vol</th><th>vol_cur</th><th>last</th><th>buy</th><th>sell</th><th>updated</th>
+          </tr>
+          {% for ticker in tickers %}
+          <tr>
+            <td>{{ ticker.high }}</td>
+            <td>{{ ticker.low }}</td>
+            <td>{{ ticker.avg }}</td>
+            <td>{{ ticker.vol }}</td>
+            <td>{{ ticker.vol_cur }}</td>
+            <td>{{ ticker.last }}</td>
+            <td>{{ ticker.buy }}</td>
+            <td>{{ ticker.sell }}</td>
+            <td>{{ ticker.updated }}</td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+{% endblock %}

@@ -34,6 +34,9 @@ class Ticker(Base):
     updated = Column(DateTime)
     server_time = Column(DateTime)
 
+    def __repr__(self):
+        return "%s - %s" % (self.updated, self.last)
+
 
 class MiningHistory(Base):
     __tablename__ = "mining_history"
@@ -46,3 +49,6 @@ class MiningHistory(Base):
     payout_history = Column(Integer)
     round_shares = Column(Integer)
     date_added = Column(DateTime)
+
+    def __repr__(self):
+        return "%s - %s" % (self.confirmed_rewards, self.date_added)
