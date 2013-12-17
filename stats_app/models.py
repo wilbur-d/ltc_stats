@@ -57,12 +57,13 @@ class Trades(Base):
     __tablename__ = "trades"
 
     id = Column(Integer, primary_key=True)
-    item = Column(String) # Currency type, e.g., LTC, BTC, etc.
-    date = Column(DateTime)
+    price_currency = Column(String)
     trade_type = Column(String) # 'Bid' or 'Ask'
+    item = Column(String) # Currency type, e.g., LTC, BTC, etc.
     price = Column(Float)
-    amount = Column(Float)
     tid = Column(Integer)
+    amount = Column(Float)
+    date = Column(DateTime)
 
     def __repr__(self):
         return "%s (%s): %s coins at %s" % (self.date, self.trade_type, self.amount, self.price)
