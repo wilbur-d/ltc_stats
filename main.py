@@ -11,5 +11,5 @@ if __name__ == "__main__":
     tstore = TickerStore(API_URL)
     tstore.save()
 
-    mstore = MiningHistoryStore(MINING_API_URL)
-    mstore.save()
+    # mstore = MiningHistoryStore(MINING_API_URL)
+    # mstore.save()
