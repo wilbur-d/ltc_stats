@@ -1,2 +1,4 @@
 *.pyc
 /local_settings.py
+/stats_app/local_settings.py
+/ticker.db
