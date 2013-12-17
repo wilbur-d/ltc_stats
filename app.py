@@ -21,13 +21,13 @@ db = SQLAlchemy(app)
 def index():
     tickers = db.session.query(Ticker).order_by(Ticker.updated.desc()).all()[:10]
     history = db.session.query(MiningHistory).order_by(MiningHistory.date_added.desc()).all()[:30]
-    return render_template('index.html', tickers=tickers, history=history)
+    return render_template('index.html', tickers=tickers, history=history, active="home")
 
 
 @app.route('/charts')
 def charts():
     history = db.session.query(MiningHistory).order_by(MiningHistory.date_added).all()[:30]
-    return render_template('charts.html', history=history)
+    return render_template('charts.html', history=history, active="charts")
 
 
 if __name__ == '__main__':
