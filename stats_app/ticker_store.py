@@ -2,6 +2,7 @@ import requests
 import arrow
 
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.sql import exists
 
 from models import Ticker, MiningHistory, Trades, db_connect, create_tables
 
@@ -79,11 +80,9 @@ class TradeStore(BaseStore):
         """ since we have a list of trades, we have to handle this differently """
         session = self.Session()
         feed_data = self.get_feed()
-        tids = []
-        for row in session.query(Trades, Trades.tid).all():
-            tids.append(row.tid)
         for item in feed_data:
-            if item['tid'] not in tids:
+            #if session.query(Trades).filter(Trades.tid == item['tid']).count() == 0:
+            if not session.query(exists().where(Trades.tid == item['tid'])).scalar():
                 feed_dict = item
                 feed_dict['date'] = arrow.get(feed_dict['date']).datetime
                 stats_obj = self.model(**feed_dict)
