@@ -31,6 +31,9 @@ def charts():
     history = db.session.query(MiningHistory).order_by(MiningHistory.date_added).all()[-30:]
     return render_template('charts.html', history=history, active="charts")
 
+@app.route('/payouts')
+def payouts():
+    return render_template('payouts.html',active="payouts")
 
 if __name__ == '__main__':
     app.debug = True
