@@ -46,7 +46,7 @@ class MiningHistory(Base):
     confirmed_rewards = Column(Float)
     round_estimate = Column(Float)
     total_hashrate = Column(Integer)
-    payout_history = Column(Integer)
+    payout_history = Column(Float)
     round_shares = Column(Integer)
     date_added = Column(DateTime)
 
