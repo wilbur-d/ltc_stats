@@ -116,11 +116,6 @@ class TradeStore(BaseStore):
     u'tid': 20572079, <-- are the unique over all time?
     u'amount': 1,
     u'date': 1387055215}
-
-    from each of these, we want to record: date, type, price, amount, tid
-
-    also: two calls to the api may return lists with significant
-    overlap. what's the best way to eliminiate that?
     """
     model = Trades
 
