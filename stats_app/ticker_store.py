@@ -1,3 +1,6 @@
+import logging
+import sys
+
 import requests
 import arrow
 
@@ -6,6 +9,8 @@ from sqlalchemy.sql import exists
 
 from models import Ticker, MiningHistory, Trades, db_connect, create_tables
 
+log = logging.getLogger(__name__)
+
 
 class BaseStore(object):
     model = None
@@ -13,10 +18,15 @@ class BaseStore(object):
     def __init__(self, url):
         self.url = url
         engine = db_connect()
-        create_tables(engine)
+        try:
+            create_tables(engine)
+        except:
+            e = sys.exc_info()[0]
+            log.error("Unable to create tables. %s" % e)
         self.Session = sessionmaker(bind=engine)
 
         if not self.model:
+            log.warning("BaseStore instantiated without model class variable")
             raise NotImplementedError("Subclasses must set model class!")
 
     def get_feed(self):
@@ -29,8 +39,13 @@ class BaseStore(object):
     def save(self):
         session = self.Session()
 
-        feed_data = self.get_feed()
-        feed_dict = self.parse_feed(feed_data)
+        try:
+            feed_data = self.get_feed()
+        except:
+            e = sys.exc_info()[0]
+            log.error("Unable to get feed data. %s" % e)
+        else:
+            feed_dict = self.parse_feed(feed_data)
 
         stats_obj = self.model(**feed_dict)
         session.add(stats_obj)
