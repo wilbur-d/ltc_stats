@@ -1,6 +1,7 @@
-from sqlalchemy import create_engine, Column, Integer, Float, DateTime, String
+from sqlalchemy import create_engine, Column, Integer, Float, DateTime, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.engine.url import URL
+from sqlalchemy.orm import relationship, backref
 
 import settings
 
@@ -38,6 +39,17 @@ class Ticker(Base):
         return "%s - %s" % (self.updated, self.last)
 
 
+class Pool(Base):
+    __tablename__ = "pool"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    url = Column(String)
+
+    def __repr__(self):
+        return "%s: %s" % (self.name, self.url)
+
+
 class MiningHistory(Base):
     __tablename__ = "mining_history"
 
@@ -49,6 +61,9 @@ class MiningHistory(Base):
     payout_history = Column(Float)
     round_shares = Column(Integer)
     date_added = Column(DateTime)
+    pool_id = Column(Integer, ForeignKey('pool.id'))
+
+    pool = relationship("Pool", backref=backref('mining_histories', order_by=id))
 
     def __repr__(self):
         return "%s - %s" % (self.confirmed_rewards, self.date_added)
