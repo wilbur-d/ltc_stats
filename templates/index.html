@@ -1,4 +1,14 @@
 {% extends "base.html" %}
+
+{% block head %}
+<style type="text/css">
+.table-striped tbody > tr:nth-child(odd) > td, .table-striped tbody > tr:nth-child(odd) > th {
+    background-color: #cecece;
+}
+</style>
+{% endblock head %}
+
+
 {% block content %}
       <div class="panel panel-default">
         <div class="panel-heading">
