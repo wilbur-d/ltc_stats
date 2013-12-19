@@ -7,7 +7,7 @@ import arrow
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import exists
 
-from models import Ticker, MiningHistory, Trades, db_connect, create_tables
+from models import Ticker, MiningHistory, Trades, Pool, db_connect, create_tables
 
 log = logging.getLogger(__name__)
 
@@ -66,11 +66,44 @@ class TickerStore(BaseStore):
 class MiningHistoryStore(BaseStore):
     model = MiningHistory
 
+    def __init__(self, pool_api):
+        url = pool_api['url']
+        super(MiningHistoryStore, self).__init__(url)
+        pool_name = pool_api['name']
+
+        self.session = self.Session()
+        if not self.session.query(exists().where(Pool.name == pool_name).where(Pool.url == url)).scalar():
+            pool = Pool(name=pool_name, url=url)
+            self.session.add(pool)
+            self.session.commit()
+        else:
+            pool = self.session.query(Pool).filter(Pool.name == pool_name).filter(Pool.url == url).one()
+
+        self.pool = pool
+
     def parse_feed(self, data):
         _ = data.pop('workers', None)
         mining_status = data
         mining_status['date_added'] = arrow.utcnow().datetime
         return mining_status
+
+    def save(self):
+        try:
+            feed_data = self.get_feed()
+        except:
+            e = sys.exc_info()[0]
+            log.error("Unable to get feed data. %s" % e)
+        else:
+            feed_dict = self.parse_feed(feed_data)
+
+        stats_obj = self.model(**feed_dict)
+        stats_obj.pool = self.pool
+
+        self.session.add(stats_obj)
+        self.session.commit()
+
+        return stats_obj
+
 
 class TradeStore(BaseStore):
     """ The trade api returns a list of trades

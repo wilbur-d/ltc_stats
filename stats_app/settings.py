@@ -3,7 +3,10 @@ import logging
 
 # API settings
 API_URL = "https://btc-e.com/api/2/ltc_usd/ticker"
-MINING_API_URL = ""
+POOL = {
+    "name": "dummy",
+    "url": "",
+}
 TRADE_API_URL = "https://btc-e.com/api/2/ltc_usd/trades"
 
 # Project settings
