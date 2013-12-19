@@ -22,7 +22,9 @@ db = SQLAlchemy(app)
 def index():
     tickers = db.session.query(Ticker).order_by(Ticker.updated.desc()).all()[:10]
     history = db.session.query(MiningHistory).order_by(MiningHistory.date_added.desc()).all()[:30]
-    pool_worth = "%.2f" % round(tickers[0].last * history[0].confirmed_rewards, 2)
+    try:
+        pool_worth = "%.2f" % round(tickers[0].last * history[0].confirmed_rewards, 2)
+    except: pool_worth = "0.0"
     return render_template('index.html', tickers=tickers, history=history, pool_worth=pool_worth, active="home")
 
 
@@ -31,6 +33,9 @@ def charts():
     history = db.session.query(MiningHistory).order_by(MiningHistory.date_added).all()[-30:]
     return render_template('charts.html', history=history, active="charts")
 
+@app.route('/payouts')
+def payouts():
+    return render_template('payouts.html',active="payouts")
 
 if __name__ == '__main__':
     app.debug = True
