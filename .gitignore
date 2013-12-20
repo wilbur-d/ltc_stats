@@ -3,3 +3,5 @@
 /stats_app/local_settings.py
 /ticker.db
 stats_app/logs/*
+/payouts.html
+/payouts.org
