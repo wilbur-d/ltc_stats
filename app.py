@@ -78,12 +78,47 @@ def calculate_deltas(history, interval):
     return deltas
 
 
+def average(l):
+    """
+    returns the average value of a list of integers
+    """
+    return sum(l)/len(l)
+
+
+def stdev(l):
+    """
+    return the standard deviation of a list of integers
+    """
+    avg = average(l)
+    variance = map(lambda x: (x - avg)**2, l)
+    avg_variance = average(variance)
+    return math.sqrt(avg_variance)
+
+
+def humanize_minutes(mins):
+    """
+    return a human readable string of time
+    from minutes
+    """
+    if mins >= 60 and mins < 1440:
+        # greater than or equal to 1 hour, and less than 1 day, return hours
+        human = "%s hour" % (mins/60)
+    elif mins >= 1440:
+        # greater than or equal to 1 day, return days
+        human = "%s day" % (mins/1440)
+    else:
+        # less than an hour, return the minutes
+        human = "%s minute" % mins
+    return human
+
+
 @app.route('/stats/')
 def stats():
     # get arguments
     records = int(request.args.get('records', 50))
     interval = int(request.args.get('interval', 5))
     pool = request.args.get('pool', None)
+    order = request.args.get('order', 'desc')
 
     # if pool is not set use the most recently mined
     if pool is None:
@@ -109,32 +144,26 @@ def stats():
     # calculate deltas
     deltas = calculate_deltas(history, interval)
 
-    # set some human readable times
-    if interval >= 60 and interval < 1440:
-        human_interval = "%s hour" % str(interval/60)
-    elif interval >= 1440:
-        human_interval = "%s day" % str(interval/1440)
-    else:
-        human_interval = "%s minute" % interval
-
-    # we need deltas in ascending order for the calculation
-    # but they read better in descending so reverse the ordering
-    deltas.reverse()
+    if order == 'desc':
+        # order defaults to ascending in order to help calculate
+        # the deltas. Make it desc
+        deltas.reverse()
 
     # Continuing broken logic from adding 1 to records above
-    # makes sure we have at most records
+    # makes sure we have at most the actual requested # of records
     deltas = deltas[:records]
 
     # let's just build this list once
     hdelts = [h.delta for h in deltas]
 
     # calculate avg delta
-    avg_delta = sum(hdelts)/len(hdelts)
+    avg_delta = average(hdelts)
 
     # std dev
-    variance = map(lambda x: (x - avg_delta)**2, hdelts)
-    avg_variance = sum(variance)/len(variance)
-    std_dev = math.sqrt(avg_variance)
+    std_dev = stdev(hdelts)
+
+    # set some human readable times
+    human_interval = humanize_minutes(interval)
 
     # get the pools for the drop down selection
     pools = db.session.query(Pool).all()
