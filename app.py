@@ -70,7 +70,8 @@ def calculate_deltas(history, interval):
             current_total_rewards = h.confirmed_rewards + h.payout_history
             prev_total_rewards = prev.confirmed_rewards + prev.payout_history
             # and calculate the delta
-            deltas.append((h, current_total_rewards - prev_total_rewards))
+            h.delta = current_total_rewards - prev_total_rewards
+            deltas.append(h)
             # set current entry to prev
             prev = h
     return deltas
@@ -123,10 +124,21 @@ def stats():
     # makes sure we have at most records
     deltas = deltas[:records]
 
+    # calculate avg delta
+    avg_delta = sum(h.delta for h in deltas)/len(deltas)
     # get the pools for the drop down selection
     pools = db.session.query(Pool).all()
 
-    return render_template('stats.html', active="stats", deltas=deltas, interval=human_interval, pools=pools, records=len(deltas), active_pool=pool)
+    return render_template(
+        'stats.html',
+        active="stats",
+        deltas=deltas,
+        interval=human_interval,
+        pools=pools,
+        records=len(deltas),
+        active_pool=pool,
+        avg_delta=avg_delta,
+    )
 
 
 @app.route('/payouts')

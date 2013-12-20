@@ -48,8 +48,6 @@
       <div class="panel panel-default">
         <div class="panel-heading">
           <h2>Alug Mining Stats</h2>
-          <p>Showing <strong>{{ records }}</strong> records @ <strong>{{ interval }}</strong> interval from <strong>{{ active_pool }}</strong></p>
-
           <nav class="navbar navbar-default" role="navigation">
             <div class="navbar-header">
               <a class="navbar-brand" href="#">Options:</a>
@@ -62,7 +60,6 @@
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Pool <b class="caret"></b></a>
                   <ul class="dropdown-menu" role="menu">
                     {% for pool in pools %}
-                    <!-- <li><a onClick="addOrUpdateUrlParam('pool', '{{ pool.name }}');">{{ pool.name }}</a></li> -->
                     <li><a href="javascript:setParam('pool', '{{ pool.name }}');">{{ pool.name }}</a></li>
                     {% endfor %}
                   </ul>
@@ -102,7 +99,20 @@
             </div>
           </nav>
 
+          <p>Showing <strong>{{ records }}</strong> records @ <strong>{{ interval }}</strong> interval from <strong>{{ active_pool }}</strong></p>
+
+        <table class="table table-striped table-responsive">
+          <tr>
+            <th>Avg Delta</th>
+          </tr>
+          <tr>
+            <td>Avg Delta: <strong>{{ avg_delta }}</strong></td>
+          </tr>
+        </table>
+
+
         </div>
+
         <table class="table table-striped table-responsive">
           <tr>
             <th>Pool</th>
@@ -111,9 +121,9 @@
           </tr>
           {% for delta in deltas %}
           <tr>
-            <td>{{ delta[0].pool.name }}</td>
-            <td>{{ delta[0].date_added }}</td>
-            <td>{{ delta[1] }}</td>
+            <td>{{ delta.pool.name }}</td>
+            <td>{{ delta.date_added }}</td>
+            <td>{{ delta.delta }}</td>
           </tr>
           {% endfor %}
         </table>
