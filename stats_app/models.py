@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, Float, DateTime, String, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, Float, DateTime, String, ForeignKey, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import relationship, backref
@@ -83,3 +83,40 @@ class Trades(Base):
 
     def __repr__(self):
         return "%s (%s): %s coins at %s" % (self.date, self.trade_type, self.amount, self.price)
+
+class MinerStatus(Base):
+    """ Record the status of the miner
+    """
+    __tablename__ = "miner_status"
+
+    id = Column(Integer, primary_key=True)
+    stratum_active = Column(Boolean)
+    difficulty_accepted = Column(Float)
+    pool_rejected_percent = Column(Float)
+    difficulty_rejected = Column(Float)
+    diff1_shares = Column(Integer)
+    status =  Column(String)
+    proxy_type = Column(String)
+    best_share = Column(Integer)
+    pool_stale_percent = Column(Float)
+    quota = Column(Integer)
+    rejected = Column(Integer)
+    stratum_URL = Column(String)
+    user = Column(String)
+    long_poll = Column(String)
+    accepted =  Column(Integer)
+    proxy = Column(String)
+    get_failures = Column(Integer)
+    difficulty_stale =  Column(Float)
+    url = Column(String)
+    discarded = Column(Integer)
+    has_stratum = Column(Boolean)
+    last_share_time = Column(Integer)
+    stale = Column(Integer)
+    works = Column(Integer)
+    pool = Column(Integer)
+    priority = Column(Integer)
+    getworks = Column(Integer)
+    has_GBT = Column(Boolean)
+    last_share_difficulty = Column(Float)
+    remote_failures = Column(Integer)
