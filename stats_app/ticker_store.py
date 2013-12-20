@@ -7,7 +7,7 @@ import arrow
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import exists
 
-from models import Ticker, MiningHistory, Trades, Pool, db_connect, create_tables
+from models import Ticker, MiningHistory, Trades, Pool, MinerStatus, db_connect, create_tables
 
 log = logging.getLogger(__name__)
 
@@ -132,3 +132,9 @@ class TradeStore(BaseStore):
                 session.add(stats_obj)
                 session.commit()
             #return stats_obj # do we need to return this?
+
+class MinerStatusStore(BaseStore):
+    model = MinerStatus
+
+    def get_feed(source):
+        pass

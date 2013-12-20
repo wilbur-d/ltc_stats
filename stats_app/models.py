@@ -90,6 +90,8 @@ class MinerStatus(Base):
     __tablename__ = "miner_status"
 
     id = Column(Integer, primary_key=True)
+    date_added = Column(DateTime)
+    # from source
     stratum_active = Column(Boolean)
     difficulty_accepted = Column(Float)
     pool_rejected_percent = Column(Float)
