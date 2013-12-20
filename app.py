@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import datetime
+import math
 
 from flask import Flask, request
 from flask import render_template
@@ -124,8 +125,17 @@ def stats():
     # makes sure we have at most records
     deltas = deltas[:records]
 
+    # let's just build this list once
+    hdelts = [h.delta for h in deltas]
+
     # calculate avg delta
-    avg_delta = sum(h.delta for h in deltas)/len(deltas)
+    avg_delta = sum(hdelts)/len(hdelts)
+
+    # std dev
+    variance = map(lambda x: (x - avg_delta)**2, hdelts)
+    avg_variance = sum(variance)/len(variance)
+    std_dev = math.sqrt(avg_variance)
+
     # get the pools for the drop down selection
     pools = db.session.query(Pool).all()
 
@@ -138,6 +148,7 @@ def stats():
         records=len(deltas),
         active_pool=pool,
         avg_delta=avg_delta,
+        std_dev=std_dev,
     )
 
 
