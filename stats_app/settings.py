@@ -1,12 +1,23 @@
 import os
 import logging
 
+DEBUG = False
+
 # API settings
 API_URL = "https://btc-e.com/api/2/ltc_usd/ticker"
-POOL = {
-    "name": "dummy",
-    "url": "",
+
+POOLS = {"wemine": {
+    "name": "wemine",
+    "url": "https://www.wemineltc.com/api?api_key=YOUR_API_KEY_HERE",
+},
+    "coin-pool": {
+        "name": "lite.coin-pool.com",
+        "url": "http://lite.coin-pool.com/api.php?api_key=YOUR_API_KEY_HERE",
+    }
 }
+
+POOL = POOLS['coin-pool']
+
 TRADE_API_URL = "https://btc-e.com/api/2/ltc_usd/trades"
 
 # Project settings
