@@ -136,5 +136,13 @@ class TradeStore(BaseStore):
 class MinerStatusStore(BaseStore):
     model = MinerStatus
 
-    def get_feed(source):
+    def get_feed(self, source):
+        """ query the miner for its status """
         pass
+
+    def parse_feed(self, data):
+        cleaned = {}
+        cleaned['date_added'] = arrow.now().datetime
+        for k,v in data.iteritems():
+            cleaned[k.lower().replace(' ', '_')] = v
+        return cleaned
