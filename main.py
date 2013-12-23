@@ -32,8 +32,15 @@ if __name__ == "__main__":
     #     log.error("Unable to save Trade. %s" % e)
 
     try:
-        minerstore = MinerStore('stats')
-        minerstore.save()
+        gpustore = GPUStore('stats')
+        gpustore.save()
     except:
         e = sys.exc_info()[0]
-        log.error("Unable to save Miner stats. %s" % e)
+        log.error("Unable to save GPU stats. %s" % e)
+
+        #    try:
+    poolstore = MinerPoolStore('stats')
+    poolstore.save()
+    # except:
+    #     e = sys.exc_info()[0]
+    #     log.error("Unable to save Miner pool stats. %s" % e)

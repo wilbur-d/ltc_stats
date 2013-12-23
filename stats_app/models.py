@@ -88,9 +88,9 @@ class GpuStats(Base):
     __tablename__ = "gpu_stats"
     id = Column(Integer, primary_key=True)
     date_added = Column(DateTime)
-    gpu_num = Column(Integer)
+    gpu = Column(Integer)
     calls = Column(Integer)
-    minimum = Column(Float) # what sort of number is 3e-06?
+    minimum = Column(Float)
     maximum = Column(Float)
     elapsed = Column(Integer)
     gpu_id = Column(String)
@@ -99,7 +99,9 @@ class GpuStats(Base):
 class CGMinerPoolStats(Base):
     __tablename__ = "cgminer_pool_stats"
     id = Column(Integer, primary_key=True)
-    minimum = Column(Float) # again, 3e-06?
+    work_can_roll = Column(Boolean)
+    pool_av = Column(Float)
+    minimum = Column(Float)
     work_roll_time = Column(Boolean)
     work_diff = Column(Float)
     net_bytes_recv = Column(Integer)
