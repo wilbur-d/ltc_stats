@@ -43,7 +43,31 @@ def index():
         pool_worth = "%.2f" % round(tickers[0].last * history[0].confirmed_rewards, 2)
     except:
         pool_worth = "0.0"
-    return render_template('index.html', tickers=tickers, history=history, pool_worth=pool_worth, active="home")
+
+    # get latest update
+    current_entry = history[0]
+
+    # this try/except is bad. I am a lazy man
+    try:
+        # get the last entry from the previous pool
+        last_change = db.session.query(MiningHistory).order_by(MiningHistory.date_added.desc()).filter(MiningHistory.pool != current_entry.pool)[0]
+
+        # calculate how long we have been on current pool
+        timediff = current_entry.date_added - last_change.date_added
+        minutes_on_pool = timediff.seconds/60
+
+        time_on_pool = humanize_minutes(minutes_on_pool)
+    except:
+        time_on_pool = "FOREVER"
+
+    return render_template(
+        'index.html',
+        tickers=tickers,
+        history=history,
+        pool_worth=pool_worth,
+        active="home",
+        current_pool=current_entry.pool,
+        time_on_pool=time_on_pool)
 
 
 @app.route('/charts/')
