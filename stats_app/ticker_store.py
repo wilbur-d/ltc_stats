@@ -7,7 +7,7 @@ import arrow
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import exists
 
-from models import Ticker, MiningHistory, Trades, Pool, db_connect, create_tables
+from models import Ticker, MiningHistory, Trades, Pool, MinerStatus, db_connect, create_tables
 
 log = logging.getLogger(__name__)
 
@@ -116,11 +116,6 @@ class TradeStore(BaseStore):
     u'tid': 20572079, <-- are the unique over all time?
     u'amount': 1,
     u'date': 1387055215}
-
-    from each of these, we want to record: date, type, price, amount, tid
-
-    also: two calls to the api may return lists with significant
-    overlap. what's the best way to eliminiate that?
     """
     model = Trades
 
@@ -137,3 +132,17 @@ class TradeStore(BaseStore):
                 session.add(stats_obj)
                 session.commit()
             #return stats_obj # do we need to return this?
+
+class MinerStatusStore(BaseStore):
+    model = MinerStatus
+
+    def get_feed(self, source):
+        """ query the miner for its status """
+        pass
+
+    def parse_feed(self, data):
+        cleaned = {}
+        cleaned['date_added'] = arrow.now().datetime
+        for k,v in data.iteritems():
+            cleaned[k.lower().replace(' ', '_')] = v
+        return cleaned
