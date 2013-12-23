@@ -11,19 +11,18 @@ from cgminer import CGMiner
 log = logging.getLogger(__name__)
 
 
-def active_pool_api():
+def active_pool():
     miner = CGMiner(MINER_IP, MINER_PORT)
     r = miner.command('pools')
     pools = r.dict()['POOLS']
     active = next((p for p in pools if p['Stratum Active'] is True), None)
     active_pool = POOLS[active['URL']]
-    active_api = active_pool['url']
-    return active_api
+    return active_pool
 
 
 if __name__ == "__main__":
     try:
-        mstore = MiningHistoryStore(active_pool_api())
+        mstore = MiningHistoryStore(active_pool())
         mstore.save()
     except:
         e = sys.exc_info()[0]
