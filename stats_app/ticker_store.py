@@ -7,7 +7,11 @@ import arrow
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import exists
 
+from cgminer import CGMiner as cgm
+
 from models import Ticker, MiningHistory, Trades, Pool, MinerStatus, db_connect, create_tables
+
+
 
 log = logging.getLogger(__name__)
 
@@ -136,9 +140,9 @@ class TradeStore(BaseStore):
 class MinerStatusStore(BaseStore):
     model = MinerStatus
 
-    def get_feed(self, source):
+    def get_feed(self):
         """ query the miner for its status """
-        pass
+        return cgm.command(source)
 
     def parse_feed(self, data):
         cleaned = {}
