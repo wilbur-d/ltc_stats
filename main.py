@@ -9,13 +9,13 @@ from stats_app.settings import API_URL, POOL, TRADE_API_URL
 log = logging.getLogger(__name__)
 
 if __name__ == "__main__":
-    # try:
-    #     mstore = MiningHistoryStore(POOL)
-    #     mstore.save()
-    # except:
-    #     e = sys.exc_info()[0]
-    #     log.error("Unable to save MiningHistory. %s" % e)
-    #     raise
+    try:
+        mstore = MiningHistoryStore(POOL)
+        mstore.save()
+    except:
+        e = sys.exc_info()[0]
+        log.error("Unable to save MiningHistory. %s" % e)
+        raise
 
     try:
         tstore = TickerStore(API_URL)
