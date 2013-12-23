@@ -3,7 +3,7 @@
 import logging
 import sys
 
-from stats_app.ticker_store import TickerStore, MiningHistoryStore, TradeStore
+from stats_app.ticker_store import TickerStore, MiningHistoryStore, TradeStore, GPUStore, MinerPoolStore
 from stats_app.settings import API_URL, POOLS, TRADE_API_URL, MINER_IP, MINER_PORT
 
 from cgminer import CGMiner
@@ -43,3 +43,17 @@ if __name__ == "__main__":
     except:
         e = sys.exc_info()[0]
         log.error("Unable to save Trade. %s" % e)
+
+    try:
+        gpustore = GPUStore('stats')
+        gpustore.save()
+    except:
+        e = sys.exc_info()[0]
+        log.error("Unable to save GPU stats. %s" % e)
+
+    try:
+        poolstore = MinerPoolStore('stats')
+        poolstore.save()
+    except:
+        e = sys.exc_info()[0]
+        log.error("Unable to save Miner pool stats. %s" % e)

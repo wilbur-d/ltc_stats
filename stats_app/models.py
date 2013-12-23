@@ -84,6 +84,51 @@ class Trades(Base):
     def __repr__(self):
         return "%s (%s): %s coins at %s" % (self.date, self.trade_type, self.amount, self.price)
 
+class GpuStats(Base):
+    __tablename__ = "gpu_stats"
+    id = Column(Integer, primary_key=True)
+    date_added = Column(DateTime)
+    gpu = Column(Integer)
+    calls = Column(Integer)
+    minimum = Column(Float)
+    maximum = Column(Float)
+    elapsed = Column(Integer)
+    gpu_id = Column(String)
+    wait = Column(Float)
+
+class CGMinerPoolStats(Base):
+    __tablename__ = "cgminer_pool_stats"
+    id = Column(Integer, primary_key=True)
+    work_can_roll = Column(Boolean)
+    pool_av = Column(Float)
+    minimum = Column(Float)
+    work_roll_time = Column(Boolean)
+    work_diff = Column(Float)
+    net_bytes_recv = Column(Integer)
+    times_recv = Column(Integer)
+    times_sent = Column(Integer)
+    maximum = Column(Float)
+    elapsed = Column(Integer)
+    pool_min = Column(Float)
+    min_diff = Column(Float)
+    work_had_expire = Column(Boolean)
+    wait = Column(Float)
+    stats = Column(Integer)
+    calls = Column(Integer)
+    bytes_sent = Column(Integer)
+    pool_max = Column(Float)
+    max_diff = Column(Float)
+    pool_num = Column(String)
+    work_had_roll_time = Column(Boolean)
+    pool_calls = Column(Integer)
+    net_bytes_sent = Column(Integer)
+    pool_av = Column(Float)
+    bytes_recv = Column(Integer)
+    max_diff_count = Column(Integer)
+    pool_attempts = Column(Integer)
+    pool_wait = Column(Float)
+    min_diff_count = Column(Integer)
+
 class MinerStatus(Base):
     """ Record the status of the miner
     """
@@ -91,7 +136,6 @@ class MinerStatus(Base):
 
     id = Column(Integer, primary_key=True)
     date_added = Column(DateTime)
-    # from source
     stratum_active = Column(Boolean)
     difficulty_accepted = Column(Float)
     pool_rejected_percent = Column(Float)

@@ -1,5 +1,6 @@
 import logging
 import sys
+import json
 
 import requests
 import arrow
@@ -7,7 +8,9 @@ import arrow
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import exists
 
-from models import Ticker, MiningHistory, Trades, Pool, MinerStatus, db_connect, create_tables
+from cgminer import CGMiner as cgm
+
+from models import Ticker, MiningHistory, Trades, Pool, CGMinerPoolStats, GpuStats, db_connect, create_tables
 
 log = logging.getLogger(__name__)
 
@@ -133,16 +136,92 @@ class TradeStore(BaseStore):
                 session.commit()
             #return stats_obj # do we need to return this?
 
-class MinerStatusStore(BaseStore):
-    model = MinerStatus
+class GPUStore(BaseStore):
+    model = GpuStats
 
-    def get_feed(self, source):
-        """ query the miner for its status """
-        pass
+    def get_feed(self):
+        s = cgm(api_ip='192.168.11.99')
+        return json.loads(s.command('stats').json())
+
+    def clean_keys(self, feed_dict):
+        clean = {}
+        for k,v in feed_dict.iteritems():
+            if k == "Min":
+                clean['minimum'] = v
+            elif k == "Max":
+                clean['maximum'] = v
+            elif k == 'STATS':
+                clean['gpu'] = v
+            elif k == 'ID':
+                clean['gpu_id'] = v
+            else:
+                clean[k.lower().replace(' ', '_')] = v
+        return clean
 
     def parse_feed(self, data):
-        cleaned = {}
-        cleaned['date_added'] = arrow.now().datetime
-        for k,v in data.iteritems():
-            cleaned[k.lower().replace(' ', '_')] = v
-        return cleaned
+        gpu_0 = data['STATS'][0]
+        gpu_0['date_added'] = arrow.get().datetime
+        gpu_1 = data['STATS'][1]
+        gpu_1['date_added'] = arrow.get().datetime
+        gpu_2 = data['STATS'][2]
+        gpu_2['date_added'] = arrow.get().datetime
+        return self.clean_keys(gpu_0), self.clean_keys(gpu_1), self.clean_keys(gpu_2)
+
+    def save(self):
+        session = self.Session()
+
+        try:
+            feed_data = self.get_feed()
+        except:
+            e = sys.exc_info()[0]
+            log.error("Unable to get feed data. %s" % e)
+        else:
+            feed_dicts = self.parse_feed(feed_data)
+
+        for feed_dict in feed_dicts:
+            stats_obj = self.model(**feed_dict)
+            session.add(stats_obj)
+            session.commit()
+
+class MinerPoolStore(BaseStore):
+    model = CGMinerPoolStats
+
+    def get_feed(self):
+        s = cgm(api_ip='192.168.11.99')
+        return json.loads(s.command('stats').json())
+
+    def clean_keys(self,feed_dict):
+        clean = {}
+        for k,v in feed_dict.iteritems():
+            if k == "Min":
+                clean['minimum'] = v
+            elif k == "Max":
+                clean['maximum'] = v
+            elif k == 'ID':
+                clean['pool_num'] = v
+            else:
+                clean[k.lower().replace(' ', '_')] = v
+        return clean
+
+    def parse_feed(self, data):
+        try:
+            return [self.clean_keys(x) for x in data[3:]]
+        except:
+            e = sys.exc_info()[0]
+            log.error("Unable to parse pool data. %s" % e)
+
+    def save(self):
+        session = self.Session()
+
+        try:
+            feed_data = self.get_feed()
+        except:
+            e = sys.exc_info()[0]
+            log.error("Unable to get pool data from cgminer. %s" % e)
+        else:
+            feed_dicts = self.parse_feed(feed_data['STATS'])
+
+        for feed_dict in feed_dicts:
+            stats_obj = self.model(**feed_dict)
+            session.add(stats_obj)
+            session.commit()
