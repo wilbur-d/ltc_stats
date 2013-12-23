@@ -1,5 +1,6 @@
 import logging
 import sys
+import json
 
 import requests
 import arrow
@@ -9,9 +10,7 @@ from sqlalchemy.sql import exists
 
 from cgminer import CGMiner as cgm
 
-from models import Ticker, MiningHistory, Trades, Pool, MinerStatus, db_connect, create_tables
-
-
+from models import Ticker, MiningHistory, Trades, Pool, CGMinerPoolStats, GPUStats, db_connect, create_tables
 
 log = logging.getLogger(__name__)
 
@@ -137,16 +136,23 @@ class TradeStore(BaseStore):
                 session.commit()
             #return stats_obj # do we need to return this?
 
-class MinerStatusStore(BaseStore):
-    model = MinerStatus
+
+class GPUStore(BaseStore):
+    model = GpuStats
 
     def get_feed(self):
-        """ query the miner for its status """
-        return cgm.command(source)
+        s = cgm(api_ip='192.168.11.99')
+        return json.loads(s.command('stats').json())
 
-    def parse_feed(self, data):
-        cleaned = {}
-        cleaned['date_added'] = arrow.now().datetime
-        for k,v in data.iteritems():
-            cleaned[k.lower().replace(' ', '_')] = v
-        return cleaned
+    def parse_feed(self,data):
+        pass
+
+class MinerPoolStore(BaseStore):
+    model = CGMinerPoolStats
+
+    def get_feed(self):
+        s = cgm(api_ip='192.168.11.99')
+        return json.loads(s.command('stats').json())
+
+    def parse_feed(self,data):
+        pass
