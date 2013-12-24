@@ -165,7 +165,7 @@ def payouts():
 
 @app.route('/summary')
 def summary():
-    summaries = db.session.query(MinerSummary).order_by(MiningHistory.date_added).all()
+    summaries = db.session.query(MinerSummary).order_by(MinerSummmary.date_added).all()
     return render_template('miner_summary.html', summaries=summaries)
 
 if __name__ == '__main__':
