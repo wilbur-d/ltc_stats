@@ -163,6 +163,11 @@ def stats():
 def payouts():
     return render_template('payouts.html', active="payouts")
 
+@app.route('/summary')
+def summary():
+    summaries = db.session.query(MinerSummary).order_by(MiningHistory.date_added).all()
+    return render_template('miner_summary.html', summaries=summaries)
+
 if __name__ == '__main__':
     app.debug = DEBUG
     app.run(host='0.0.0.0')
