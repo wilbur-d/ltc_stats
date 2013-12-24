@@ -236,6 +236,7 @@ class MinerSummaryStore(BaseStore):
 
     def clean_keys(self, some_dict):
         clean = {}
+        clean['date_added'] = arrow.get().datetime
         for k,v in some_dict.iteritems():
             k = k.lower().replace(' ', '_').replace('%','_percent')
             clean[k] = v
