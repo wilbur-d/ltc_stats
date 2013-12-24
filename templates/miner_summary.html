@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block head %}
+
+<style type="text/css">
+.table-striped tbody > tr:nth-child(odd) > td, .table-striped tbody > tr:nth-child(odd) > th {
+    background-color: #cecece;
+}
+</style>
+
+{% block content %}
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h2>Miner Summary</h2>
+        </div>
+
+        <table class="table table-striped table-responsive">
+          <tr>
+	    <th>Difficulty Accepted</th>
+	    <th>Pool Rejected%     </th>
+	    <th>Found Blocks       </th>
+	    <th>Difficulty Rejected</th>
+	    <th>Device Rejected%   </th>
+	    <th>Pool Stale%        </th>
+	    <th>Work Utility       </th>
+	    <th>Rejected           </th>
+	    <th>Elapsed            </th>
+	    <th>Hardware Errors    </th>
+	    <th>Accepted           </th>
+	    <th>Network Blocks     </th>
+	    <th>Local Work         </th>
+	    <th>Get Failures       </th>
+	    <th>Difficulty Stale   </th>
+	    <th>Total MH           </th>
+	    <th>Device Hardware%   </th>
+	    <th>Discarded          </th>
+	    <th>Stale              </th>
+	    <th>MHS av             </th>
+	    <th>Getworks           </th>
+	    <th>MHS 5s             </th>
+	    <th>Best Share         </th>
+	    <th>Remote Failures    </th>
+	    <th>Utility</th>
+          </tr>
+
+          {% for  summary in summaries %}
+          <tr>
+    <td> {{ summary.date_added }} </td>
+    <td> {{ summary.difficulty_accepted }} </td>
+    <td> {{ summary.pool_rejected_percent }} </td>
+    <td> {{ summary.found_blocks }} </td>
+    <td> {{ summary.difficulty_rejected }} </td>
+    <td> {{ summary.device_rejected_percent }} </td>
+    <td> {{ summary.pool_stale_percent }} </td>
+    <td> {{ summary.work_utility }} </td>
+    <td> {{ summary.rejected }} </td>
+    <td> {{ summary.elapsed }} </td>
+    <td> {{ summary.hardware_errors }} </td>
+    <td> {{ summary.accepted }} </td>
+    <td> {{ summary.network_blocks }} </td>
+    <td> {{ summary.local_work }} </td>
+    <td> {{ summary.get_failures }} </td>
+    <td> {{ summary.difficulty_stale }} </td>
+    <td> {{ summary.total_mh }} </td>
+    <td> {{ summary.device_hardware_percent }} </td>
+    <td> {{ summary.discarded }} </td>
+    <td> {{ summary.stale }} </td>
+    <td> {{ summary.mhs_av }} </td>
+    <td> {{ summary.getworks }} </td>
+    <td> {{ summary.mhs_5s }} </td>
+    <td> {{ summary.best_share }} </td>
+    <td> {{ summary.remote_failures }} </td>
+    <td> {{ summary.utility }} </td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+{% endblock %}
