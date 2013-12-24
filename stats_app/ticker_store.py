@@ -10,7 +10,7 @@ from sqlalchemy.sql import exists
 
 from cgminer import CGMiner as cgm
 
-from models import Ticker, MiningHistory, Trades, Pool, CGMinerPoolStats, GpuStats, db_connect, create_tables
+from models import Ticker, MiningHistory, Trades, Pool, CGMinerPoolStats, GpuStats, MinerSummary, db_connect, create_tables
 
 log = logging.getLogger(__name__)
 
@@ -226,3 +226,19 @@ class MinerPoolStore(BaseStore):
             stats_obj = self.model(**feed_dict)
             session.add(stats_obj)
             session.commit()
+
+class MinerSummaryStore(BaseStore):
+    model = MinerSummary
+
+    def get_feed(self):
+        s = cgm(api_ip='192.168.11.99')
+        return json.loads(s.command('summary').json())
+
+    def clean_keys(some_dict):
+        clean = {}
+        for k,v in some_dict.iteritems():
+            k = k.lower().replace(' ', '_').replace('%','_percent')
+            clean[k] = v
+
+    def parse_feed(self, data):
+        return clean_keys(data['SUMMARY'])
