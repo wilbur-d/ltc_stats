@@ -234,11 +234,12 @@ class MinerSummaryStore(BaseStore):
         s = cgm(api_ip='192.168.11.99')
         return json.loads(s.command('summary').json())
 
-    def clean_keys(some_dict):
+    def clean_keys(self, some_dict):
         clean = {}
         for k,v in some_dict.iteritems():
             k = k.lower().replace(' ', '_').replace('%','_percent')
             clean[k] = v
+        return clean
 
     def parse_feed(self, data):
-        return clean_keys(data['SUMMARY'])
+        return self.clean_keys(data['SUMMARY'][0])

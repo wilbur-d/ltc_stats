@@ -3,7 +3,7 @@
 import logging
 import sys
 
-from stats_app.ticker_store import TickerStore, MiningHistoryStore, TradeStore, GPUStore, MinerPoolStore
+from stats_app.ticker_store import TickerStore, MiningHistoryStore, TradeStore, GPUStore, MinerPoolStore, MinerSummaryStore
 from stats_app.settings import API_URL, POOLS, TRADE_API_URL, MINER_IP, MINER_PORT
 
 from cgminer import CGMiner
@@ -56,3 +56,10 @@ if __name__ == "__main__":
     except:
         e = sys.exc_info()[0]
         log.error("Unable to save Miner pool stats. %s" % e)
+
+    try:
+        minersummary = MinerSummaryStore('summary')
+        minersummary.save()
+    except:
+        e = sys.exc_info()[0]
+        log.error("Unable either to acquire or to save Miner Summary stats")
