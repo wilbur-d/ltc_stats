@@ -102,7 +102,7 @@ class CGMinerPoolStats(Base):
     work_can_roll = Column(Boolean)
     pool_av = Column(Float)
     minimum = Column(Float)
-    work_roll_time = Column(Boolean)
+    work_roll_time = Column(Integer)
     work_diff = Column(Float)
     net_bytes_recv = Column(Integer)
     times_recv = Column(Integer)
