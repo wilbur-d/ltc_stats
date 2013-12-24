@@ -5,20 +5,20 @@ DEBUG = False
 
 # API settings
 API_URL = "https://btc-e.com/api/2/ltc_usd/ticker"
+TRADE_API_URL = "https://btc-e.com/api/2/ltc_usd/trades"
 
-POOLS = {"wemine": {
+POOLS = {"stratum+tcp://usa.wemineltc.com:3334": {
     "name": "wemine",
     "url": "https://www.wemineltc.com/api?api_key=YOUR_API_KEY_HERE",
 },
-    "coin-pool": {
+    "stratum+tcp://lite.coin-pool.com:3333": {
         "name": "lite.coin-pool.com",
         "url": "http://lite.coin-pool.com/api.php?api_key=YOUR_API_KEY_HERE",
     }
 }
 
-POOL = POOLS['coin-pool']
-
-TRADE_API_URL = "https://btc-e.com/api/2/ltc_usd/trades"
+MINER_IP = '127.0.0.1'
+MINER_PORT = 4028
 
 # Project settings
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
