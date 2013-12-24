@@ -159,6 +159,7 @@ class GPUStore(BaseStore):
         return clean
 
     def parse_feed(self, data):
+        # FIXME: the number of gpus is not hardcoded.
         gpu_0 = data['STATS'][0]
         gpu_0['date_added'] = arrow.get().datetime
         gpu_1 = data['STATS'][1]
