@@ -9,7 +9,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 
 from stats_app.settings import DATABASE, DEBUG
 
-from stats_app.models import Ticker, MiningHistory, Pool
+from stats_app.models import Ticker, MiningHistory, Pool, MinerSummary
 
 from stats_app.utils import humanize_minutes, calculate_deltas, average, stdev, chunk_on_interval
 
@@ -162,6 +162,11 @@ def stats():
 @app.route('/payouts')
 def payouts():
     return render_template('payouts.html', active="payouts")
+
+@app.route('/summary')
+def summary():
+    summaries = db.session.query(MinerSummary).order_by(MinerSummary.date_added).all()
+    return render_template('miner_summary.html', summaries=summaries)
 
 if __name__ == '__main__':
     app.debug = DEBUG
