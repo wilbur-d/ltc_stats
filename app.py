@@ -167,7 +167,7 @@ def payouts():
 def summary():
     summaries = db.session.query(MinerSummary).order_by(MinerSummary.date_added).all()[-10:]
     summaries.reverse()
-    return render_template('miner_summary.html', summaries=summaries)
+    return render_template('miner_summary.html', summaries=summaries, active="miner_summary")
 
 if __name__ == '__main__':
     app.debug = DEBUG
